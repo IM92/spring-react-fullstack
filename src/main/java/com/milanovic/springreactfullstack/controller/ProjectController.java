@@ -7,10 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -31,5 +28,21 @@ public class ProjectController {
         return new ResponseEntity<>(project1, HttpStatus.CREATED);
     }
 
+    @RequestMapping(path = "/{projectId}", method = RequestMethod.GET)
+    private ResponseEntity<?> getProjectById(@PathVariable String projectId){
+        Project project1 = projectService.findProjectByIdentifier(projectId);
+        return new ResponseEntity<>(project1,HttpStatus.OK);
+    }
+
+    @RequestMapping(path = "/all", method = RequestMethod.GET)
+    private Iterable<Project> getAllProjects(){
+        return projectService.findAllProjects();
+    }
+
+    @RequestMapping(path = "/{projectId}", method = RequestMethod.DELETE)
+    private ResponseEntity<?> deleteProject(@PathVariable String projectId){
+         projectService.deleteProjectByIdentifier(projectId);
+         return  new ResponseEntity<String>("Project with ID: '" + projectId + "' was deleted '", HttpStatus.OK);
+    }
 
 }
